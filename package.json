@@ -1,0 +1,20 @@
+{
+  "main": "script.js",
+  "name": "title_list",
+  "type": "commonjs",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.0",
+    "globals": "^15.14.0"
+  }
+}
