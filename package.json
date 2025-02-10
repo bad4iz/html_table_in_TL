@@ -1,5 +1,5 @@
 {
-  "main": "script.js",
+  "main": "src/script.js",
   "name": "title_list",
   "type": "commonjs",
   "version": "1.0.0",
