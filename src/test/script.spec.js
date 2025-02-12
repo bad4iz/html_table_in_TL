@@ -1,9 +1,9 @@
-import { vi, it, describe, expect } from 'vitest';
+import { it, describe, expect } from 'vitest';
 
 
 import work from '../script.js';
 import { html } from './htmlForTest.js';
-import { output } from './output.js';
+import { output } from './outputTest.js';
 
 /**
  * Mock Default.
@@ -24,7 +24,11 @@ describe('🐛 spec script', () => {
 
 
     //🔥 Act
-    const res = work(html);
+    const res = work(html, {
+      VALUE_STR_NUM: 7,
+      HEADER_STR_NUM: 7,
+      START_HEADER_STR_NUM: 0
+    });
 
     //❓ Assert
     expect(res).toStrictEqual(output);

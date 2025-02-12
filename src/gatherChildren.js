@@ -1,11 +1,14 @@
-
+/**
+ * Функция для объединения ячейки с учетом объединённых ячейкам
+ *
+ * @param {Array} data - Двухмерный массив с данными о ячейках хедера.
+ * @return {Array} - Двухмерный массив с данными о ячейках хедера.
+ */
 export function gatherChildren(data) {
   if (!data.length) return [];
 
 
   const answer = [];
-  // for (let i = 0; i < data.length; i++) {
-
 
   const row = data[0];
 
@@ -14,39 +17,36 @@ export function gatherChildren(data) {
     if (!row[0].Header) {
       return gatherChildren(data.slice(1))
     }
+
     if (data.length === 1) {
       row[0].dataLe = data.length
       return [row[0]]
     }
+
     row[0].columns = gatherChildren(data.slice(1))
+
     return [row[0]]
-
-
   };
 
   for (let j = 0; j < row.length; j++) {
     const cell = row[j];
 
-
-
-
     if (!cell.Header) {
       continue
     }
 
-
     if (cell.colSpan) {
       const children = [];
-      for (let ix = 1; ix < data.length; ix++) {
+      const rowSpan = cell.rowSpan || 1;
 
-        if (!cell.Header) {
+      for (let ix = rowSpan; ix < data.length; ix++) {
+
+        if (!cell.Header && cell.rowSpan < 2) {
           continue
         }
 
         children.push(data[ix].slice(j, j + cell.colSpan));
       }
-
-      // cell.arst = children
 
       if (children.length) {
         cell.columns = gatherChildren(children);
@@ -54,7 +54,6 @@ export function gatherChildren(data) {
     }
 
     answer.push(cell);
-    // }
   }
   return answer;
 }

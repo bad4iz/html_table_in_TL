@@ -1,11 +1,21 @@
 
 import { load } from "cheerio";
-import {
-  VALUE_STR_NUM,
-  HEADER_STR_NUM,
-} from "./const.js";
 
-export default function getValuesArr(html) {
+/**
+ * Функция для получения значений из HTML-строки для последующей обратотки
+ *
+ * @param {string} html - HTML-строка
+ * @param {Object} options - Объект опций
+ * @param {number} options.VALUE_STR_NUM - Номер строки где  значения.
+ * @param {number} options.HEADER_STR_NUM -  Колчичество строк заголовков.
+ * @param {number} options.START_HEADER_STR_NUM - Номер строки где начинаются заголовки
+ * @return {Array} - Двухмерный массив с данными о ячейках хедера.
+ */
+export default function getValuesArr(html, {
+
+  VALUE_STR_NUM,
+  HEADER_STR_NUM, START_HEADER_STR_NUM
+}) {
   const $ = load(html);
   const table = $("table");
 
@@ -17,21 +27,22 @@ export default function getValuesArr(html) {
     Array.from({ length: values.length }, (_, idx) => i + "_" + idx + '              dddd'),
   );
 
-  for (let iRow = 0; iRow < HEADER_STR_NUM; iRow++) {
+  for (let iRow = START_HEADER_STR_NUM; iRow < HEADER_STR_NUM + START_HEADER_STR_NUM; iRow++) {
     const tds = rows.eq(iRow).find("td");
 
     for (let cursorData = 0, cursorValues = 0; cursorValues < values.length; cursorData++, cursorValues++) {
       const td = tds.eq(cursorData);
 
+      const cursorRowData = iRow - START_HEADER_STR_NUM
       const colSpan = Number($(td).attr("colspan")) || 1;
       const rowSpan = Number($(td).attr("rowspan"));
 
 
-      while (valuesArr[iRow][cursorValues]?.cheked) {
+      while (valuesArr[cursorRowData][cursorValues]?.cheked) {
         cursorValues++;
       }
 
-      const coord = `${iRow} ${cursorValues}`;
+      const coord = `${cursorRowData} ${cursorValues}`;
 
       const data = {
         coord,
@@ -42,7 +53,7 @@ export default function getValuesArr(html) {
       }
 
 
-      valuesArr[iRow][cursorValues] = {
+      valuesArr[cursorRowData][cursorValues] = {
         ...data,
         Header: $(td).text().trim(),
         help: 'default'
@@ -51,7 +62,7 @@ export default function getValuesArr(html) {
       if (rowSpan > 1 && colSpan > 1) {
 
         for (let cursor = cursorValues; cursor < cursorValues + colSpan; cursor++) {
-          for (let jRow = iRow + 1; jRow < rowSpan + iRow; jRow++) {
+          for (let jRow = cursorRowData + 1; jRow < rowSpan + cursorRowData; jRow++) {
             valuesArr[jRow][cursor] = {
               ...data,
               coord: `${jRow} ${cursor}`,
@@ -64,7 +75,7 @@ export default function getValuesArr(html) {
       }
 
       if (rowSpan > 1) {
-        for (let jRow = iRow + 1; jRow < rowSpan + iRow; jRow++) {
+        for (let jRow = cursorRowData + 1; jRow < rowSpan + cursorRowData; jRow++) {
 
           valuesArr[jRow][cursorValues] = {
             // link: [iRow, i],
@@ -79,9 +90,9 @@ export default function getValuesArr(html) {
 
       if (colSpan > 1) {
         for (let cursor = cursorValues + 1; cursor < cursorValues + colSpan; cursor++) {
-          valuesArr[iRow][cursor] = {
+          valuesArr[cursorRowData][cursor] = {
             ...data,
-            coord: `${iRow} ${cursor}`,
+            coord: `${cursorRowData} ${cursor}`,
             help: 'colSpan>1',
             colspan: undefined,
             rowSpan: undefined,

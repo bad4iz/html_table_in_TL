@@ -1,18 +1,22 @@
 import work from './src/script.js';
 
-
-
+import iconv from 'iconv-lite';
 import fs from "fs";
 import { writeFile } from "./src/writeFile.js";
 
-// export default function () {
-fs.readFile("./index.html", "utf-8", (err, html) => {
+fs.readFile("./index.html", (err, html) => {
   if (err) {
     console.error("Error reading file:", err);
     return;
   }
 
-  const clearValueWithChildren = work(html);
+  const decodedContent = iconv.decode(html, 'win1251');
+
+  const clearValueWithChildren = work(decodedContent, {
+    VALUE_STR_NUM: 7,
+    HEADER_STR_NUM: 7,
+    START_HEADER_STR_NUM: 12
+  });
 
   writeFile(clearValueWithChildren);
 });
