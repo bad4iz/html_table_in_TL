@@ -1,20 +1,21 @@
 {
-  "main": "src/script.js",
+  "main": "main.js",
   "name": "title_list",
-  "type": "commonjs",
+  "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
-  "author": "",
+  "author": "bad4iz",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "cheerio": "^1.0.0"
+    "cheerio": "1.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
-    "eslint": "^9.20.0",
-    "globals": "^15.14.0"
+    "@eslint/js": "9.20.0",
+    "eslint": "9.20.0",
+    "globals": "15.14.0",
+    "vitest": "3.0.5"
   }
 }

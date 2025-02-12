@@ -1,12 +1,12 @@
 
-const {
+import { load } from "cheerio";
+import {
   VALUE_STR_NUM,
   HEADER_STR_NUM,
-} = require("./const");
-const cheerio = require("cheerio");
+} from "./const.js";
 
-function getValuesArr(html) {
-  const $ = cheerio.load(html);
+export default function getValuesArr(html) {
+  const $ = load(html);
   const table = $("table");
 
   const rows = table.find("tr");
@@ -20,7 +20,7 @@ function getValuesArr(html) {
   for (let iRow = 0; iRow < HEADER_STR_NUM; iRow++) {
     const tds = rows.eq(iRow).find("td");
 
-    for (let cursorData = 0, cursorValues = 0; cursorData < values.length; cursorData++, cursorValues++) {
+    for (let cursorData = 0, cursorValues = 0; cursorValues < values.length; cursorData++, cursorValues++) {
       const td = tds.eq(cursorData);
 
       const colSpan = Number($(td).attr("colspan")) || 1;
@@ -47,6 +47,21 @@ function getValuesArr(html) {
         Header: $(td).text().trim(),
         help: 'default'
       };
+
+      if (rowSpan > 1 && colSpan > 1) {
+
+        for (let cursor = cursorValues; cursor < cursorValues + colSpan; cursor++) {
+          for (let jRow = iRow + 1; jRow < rowSpan + iRow; jRow++) {
+            valuesArr[jRow][cursor] = {
+              ...data,
+              coord: `${jRow} ${cursor}`,
+              help: 'colSpan>1*rowSpan>1',
+            };
+          };
+        }
+        cursorValues += +colSpan - 1;
+        continue
+      }
 
       if (rowSpan > 1) {
         for (let jRow = iRow + 1; jRow < rowSpan + iRow; jRow++) {
@@ -91,4 +106,3 @@ function getValuesArr(html) {
   return valuesArr;
 }
 
-module.exports = getValuesArr;

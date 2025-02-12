@@ -10,7 +10,7 @@ const VALUE_STR_NUM = 7;
 const HEADER_STR_NUM = 7;
 
 
-module.exports = {
+export {
   VALUE_STR_NUM,
   HEADER_STR_NUM,
 };
