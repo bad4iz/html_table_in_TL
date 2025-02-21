@@ -13,7 +13,7 @@ fs.readFile("./index.html", (err, html) => {
   const decodedContent = iconv.decode(html, 'win1251');
 
   const clearValueWithChildren = work(decodedContent, {
-    VALUE_STR_NUM: 7,
+    VALUE_STR_NUM: 20,
     HEADER_STR_NUM: 7,
     START_HEADER_STR_NUM: 12
   });
