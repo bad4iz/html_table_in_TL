@@ -1,7 +1,6 @@
 import { gatherChildren } from "./gatherChildren.js";
 import getValuesArr from "./getValuesArr.js";
 import removeArtifacts from "./removeArtifacts.js";
-import { writeFile } from "./writeFile.js";
 
 /**
  * Функция для обработки HTML-строки. 

@@ -46,7 +46,7 @@ export default function getValuesArr(html, {
 
       const data = {
         coord,
-        accessor: $(td).text().trim().toLowerCase().replace(/[\s+,.]/g, "_"),
+        accessor: $(td).text().trim().toLowerCase().replace(/[\s+,.]/g, "_") + coord,
         rowSpan,
         colSpan,
         cheked: true,
